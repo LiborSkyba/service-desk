@@ -1,0 +1,101 @@
+{* Latte template *}
+
+{block content}
+
+<p><a n:href="Homepage:default">← zpět na seznam zakázek</a></p>
+
+<h1>Detail zakázky</h1>
+
+{if $user->loggedIn}
+
+<h2 n:block="title">Zakázka</h2>
+    
+<table>
+    <tr><th>Datum zadání</th><th>Datum dokončení</th><th>Název zakázky</th><th>Popis zakázky</th><th>Zařízení</th><th>Stav zakázky</th><th>{if $user->loggedIn}Akce{/if}</th></tr>
+    <tr>
+        <td>{$request->getCreated_time()|date:'j.n. Y'}</td><td>{$request->getEnd_time()|date:'j.n. Y'}</td><td>{$request->getTitle()}</td><td>{$request->getDescription()}</td><td>{$request->getDevice()->getName()}</td><td>{$request->getRequest_status()->getName()}</td>
+        <td>
+            {if $user->loggedIn&&$user->isInRole(1)&&$request->getRequest_status()->getId()==1}<a n:href="Request:edit $request->getId()">Edit</a> | <a n:href="Request:cancel $request->getId()">Zrušit</a>{/if} {if $user->loggedIn&&$user->isInRole(2,3)&&$request->getRequest_status()->getId()==3}<a n:href="Request:end $request->getId()">Ukončit</a>{/if} | {if $user->loggedIn&&$user->isInRole(3)}{if $request->getRequest_status()->getId()==1}<a n:href="Request:accept $request->getId()">Přijmout</a> | {/if}{if $request->getRequest_status()->getId()==2}<a n:href="Request:accept $request->getId()">Přidělit</a> | {/if}{if $request->getRequest_status()->getId()<=3}<a n:href="Request:cancel $request->getId()">Zrušit</a>{/if}{/if}</td>
+    </tr>    
+</table>
+
+<h2>Zářízení</h2>
+
+<div>
+    <table>
+        <tr>
+            <th>Druh zařízení</th>
+            <th>Výrobce</th>
+            <th>Název zařízení</th>
+            <th>Výrobní číslo</th>
+        </tr>
+        <tr>
+            <td>{$device->getDevice_class()->getName()}</td>
+            <td>{$device->getProducer()}</td>
+            <td>{$device->getName()}</td>
+            <td>{$device->getSerial_number()}</td>
+        </tr>
+    </table>
+</div>
+
+<h2>Zákazník</h2>
+
+<div>
+    <table>
+        <tr>
+            <th>Příjmení</th>
+            <th>Jméno</th>
+            <th>Firma</th>
+            <th>Město</th>
+            <th>Adresa</th>
+            <th>Telefon</th>
+            <th>Email</th>
+        </tr>
+        <tr>
+            <td>{$costumer->getSurname()}</td>
+            <td>{$costumer->getName()}</td>
+            <td>{$costumer->getCompany()}</td>
+            <td>{$costumer->getTown()}</td>
+            <td>{$costumer->getAddress()}</td>
+            <td>{$costumer->getPhone()}</td>
+            <td>{$costumer->getEmail()}</td>
+        </tr>
+    </table>
+
+</div>
+            
+{else}
+    <h1 n:block="title2">Vítejte v informačním systému firmy Toner-Copy</h1>
+    <h2>Pro práci v systému se přihlaste svým účtem nebo se nově zaregistrujte.</h2> 
+
+{/if}
+
+{if $request->getTechnician()}
+    
+<h2>Technik</h2>
+
+<div>
+    <table>
+        <tr>
+            <th>Příjmení</th>
+            <th>Jméno</th>
+            <th>Firma</th>
+            <th>Město</th>
+            <th>Adresa</th>
+            <th>Telefon</th>
+            <th>Email</th>
+        </tr>
+        <tr>
+            <td>{$technician->getSurname()}</td>
+            <td>{$technician->getName()}</td>
+            <td>{$technician->getCompany()}</td>
+            <td>{$technician->getTown()}</td>
+            <td>{$technician->getAddress()}</td>
+            <td>{$technician->getPhone()}</td>
+            <td>{$technician->getEmail()}</td>
+        </tr>
+    </table>
+
+</div>
+
+{/if}        

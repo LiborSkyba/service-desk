@@ -1,0 +1,9 @@
+parameters:
+
+nette:
+	database:
+		dsn: 'mysql:host=localhost;dbname=czservis'
+		user: 'czservis' 
+		password: 'C04814FA48'
+		options:
+			lazy: yes

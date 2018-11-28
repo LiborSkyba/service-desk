@@ -1,0 +1,88 @@
+{* Latte template *}
+
+{block content}
+
+<p><a n:href="Homepage:default">← zpět na seznam zakázek</a></p>
+
+<h1>Přidělení technika</h1>
+
+{if $user->loggedIn}
+
+<h2 n:block="title">Zakázka</h2>
+    
+<table>
+    <tr><th>Datum zadání</th><th>Datum dokončení</th><th>Název zakázky</th><th>Popis zakázky</th><th>Zařízení</th><th>Stav zakázky</th></tr>
+    <tr>
+        <td>{$request->getCreated_time()|date:'j.n. Y'}</td><td>{$request->getEnd_time()|date:'j.n. Y'}</td><td>{$request->getTitle()}</td><td>{$request->getDescription()}</td><td>{$request->getDevice()->getName()}</td><td>{$request->getRequest_status()->getName()}</td>
+    </tr>    
+</table>
+
+            
+{else}
+    <h1 n:block="title2">Vítejte v informačním systému firmy Toner-Copy</h1>
+    <h2>Pro práci v systému se přihlaste svým účtem nebo se nově zaregistrujte.</h2> 
+
+{/if}
+
+{if $request->getTechnician()}
+    
+<h2>Přidělený technik</h2>
+
+<div>
+    <table>
+        <tr>
+            <th>Příjmení</th>
+            <th>Jméno</th>
+            <th>Firma</th>
+            <th>Město</th>
+            <th>Adresa</th>
+            <th>Telefon</th>
+            <th>Email</th>
+        </tr>
+        <tr>
+            <td>{$technician->getSurname()}</td>
+            <td>{$technician->getName()}</td>
+            <td>{$technician->getCompany()}</td>
+            <td>{$technician->getTown()}</td>
+            <td>{$technician->getAddress()}</td>
+            <td>{$technician->getPhone()}</td>
+            <td>{$technician->getEmail()}</td>
+        </tr>
+    </table>
+
+</div>
+
+{/if}        
+
+{if $user->loggedIn}<h2><a n:href="User:regtech">Registrace nového technika</a></h2>
+
+<h2>Technici:</h2>
+    
+    <table>
+        <tr>
+            <th>Příjmení</th>
+            <th>Jméno</th>
+            <th>Firma</th>
+            <th>Město</th>
+            <th>Adresa</th>
+            <th>Telefon</th>
+            <th>Email</th>
+            <th>{if $user->loggedIn}Akce{/if}</th>
+        </tr>
+        {foreach $technicians as $technician}
+        <tr>
+            <td>{$technician->getSurname()}</td>
+            <td>{$technician->getName()}</td>
+            <td>{$technician->getCompany()}</td>
+            <td>{$technician->getTown()}</td>
+            <td>{$technician->getAddress()}</td>
+            <td>{$technician->getPhone()}</td>
+            <td>{$technician->getEmail()}</td>
+            <td>{if $user->loggedIn}<a n:href="Request:assign $request->getId(),$technician->getId()">Přidělit</a>{/if}</td>
+        </tr>
+        {/foreach}
+    </table>
+
+{else}
+
+{/if}

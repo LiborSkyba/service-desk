@@ -1,0 +1,59 @@
+{* Latte template *}
+
+{block content}
+
+<p><a n:href="Homepage:default">← zpět na úvod</a></p>
+
+{if $user->loggedIn}
+
+<h2>Zákazník</h2>
+
+<div>
+    <table>
+        <tr>
+            <th>Příjmení</th>
+            <th>Jméno</th>
+            <th>Název</th>
+            <th>Adresa</th>
+            <th>Telefon</th>
+            <th>Email</th>
+            <th>{if $user->loggedIn}Editace{/if}</th>
+        </tr>
+        <tr>
+            <td>{$costumer->getSurname()}</td>
+            <td>{$costumer->getName()}</td>
+            <td>{$costumer->getCompany()}</td>
+            <td>{$costumer->getAddress()}</td>
+            <td>{$costumer->getPhone()}</td>
+            <td>{$costumer->getEmail()}</td>
+            <td>{if $user->loggedIn}<a n:href="User:edit $costumer">Edit</a>{/if}</td>
+        </tr>
+    </table>
+
+</div>
+
+    
+{else}
+<h1 n:block="title2">Vítejte v informačním systému Toner-Copy</h1>
+<h2>Pro práci v systému se přihlaste svým účtem nebo se nově zaregistrujte.</h2> 
+
+{/if}
+
+{if $user->loggedIn}<h2><a n:href="Device:create">Registrace nového zařízení</a></h2>
+<h2 n:block="title">Seznam vašich zařízení:</h2>
+   
+    <table>
+    <tr><th>Výrobce</th><th>Název zařízení</th><th>Výrobní číslo</th><th>{if $user->loggedIn}Editace zařízení{/if}</th><th>{if $user->loggedIn}Přidat zakázku{/if}</th></tr>
+        {foreach $devices as $device}
+            <tr>
+                <td>{$device->getProducer()}</td><td>{$device->getName()}</td><td>{$device->getSerial_number()}</td><td>{if $user->loggedIn}<a n:href="Device:edit $device->getId()">Edit</a>{/if}</td><td>{if $user->loggedIn}<a n:href="Device:show $device->getId()">Vybrat zařízení</a>{/if} </td>
+            </tr>    
+        {/foreach}
+    </table>
+
+
+{else}
+
+{/if}
+
+{/block}

@@ -1,0 +1,52 @@
+{**
+ * My Application layout template.
+ *
+ * @param string   $basePath web base path
+ * @param string   $robots   tell robots how to index the content of a page (optional)
+ * @param array    $flashes  flash messages
+ *}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="iso-8859-2">
+	<meta name="description" content="">
+	<meta name="robots" content="{$robots}" n:ifset="$robots">
+
+	<title>{block title|striptags|upper}Toner Copy IS{/block}</title>
+
+	<link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/css/screen.css">
+	<link rel="stylesheet" media="print" href="{$basePath}/css/print.css">
+	<link rel="shortcut icon" href="{$basePath}/favicon.ico">
+	{block head}{/block}
+</head>
+
+<body>
+	<script> document.documentElement.className+=' js' </script>
+
+	<div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
+
+        <ul class="navig">
+            <li><a n:href="Homepage:">Homepage</a></li>
+            {if $user->loggedIn}
+                {if $user->isInRole(3)}
+                    <li>Přihlášen manažér: {$login_user->getName()} {$login_user->getSurname()}<span style="padding-left:20px"><a n:href="Sign:out">Odhlásit</a></span></li>
+                {elseif $user->isInRole(2)}
+                    <li>Přihlášen technik: {$login_user->getName()} {$login_user->getSurname()}<span style="padding-left:20px"><a n:href="Sign:out">Odhlásit</a></span></li>
+                {else}
+                    <li>Přihlášen zákazník: {$login_user->getName()} {$login_user->getSurname()}<span style="padding-left:20px"><a n:href="Sign:out">Odhlásit</a></span></li>
+                {/if}
+            {else}
+                <li><a n:href="Sign:in">Přihlásit</a></li>
+            {/if}
+        </ul>
+        
+	{include content}
+
+	{block scripts}
+	<script src="{$basePath}/js/jquery.js"></script>
+	<script src="{$basePath}/js/netteForms.js"></script>
+	<script src="{$basePath}/js/main.js"></script>
+	{/block}
+</body>
+</html>
